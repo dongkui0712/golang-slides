@@ -1,0 +1,132 @@
+Go(lang)并发
+
+林天智 七牛
+lintianzhi@qiniu.com
+
+* 并发
+
+- 为什么需要并发
+- 并发的特点
+- Go并发的特点
+- 如何用Go做并发
+
+* 为什么需要并发
+
+单进程的程序跑啊跑，只能用到一个CPU线程，可是我的程序有24个线程 :(
+我在等待输入的时候是不要用到CPU的
+
+我要同时做24件事情，而不是1件事情
+我要在等待的时候让CPU也能跑起来，而不是傻呆呆等着
+
+* 并发的特点
+
+- 调度
+    充分使用资源
+- 状态同步(锁
+    大家需要按照顺序执行（先闭眼再睡觉
+
+* 举个同步的栗子
+
+.play errsub.go /^func main/,/^}/
+
+* Concurrency is not parallelism
+
+并发不是同时运行，但是能做到同时运行
+
+* Go如何做并发
+
+- goroutine
+- channel
+- select
+
+* goroutine
+
+goroutine 是Go里面被调度的一个最小单位。
+你可以像使用线程(thread)那样使用它，但是不一样。 比线程轻量，有自己的栈信息。
+程序内部可能会只有一个线程，但是有几千个goroutine。
+
+* goroutine 运行流程
+
+.image https://docs.google.com/drawings/d/1V3BkaDZVAHDhwhFlsq8iTaqADLOm90fNk9bBrzF74BQ/pub?w=960&h=720
+
+* channel
+
+channel 是Go里面消息同步的机制，往channel里面丢消息和取消息是一个原子操作。
+
+    // channel需要被初始化
+    msgChan := make(msgChan, 1)
+
+    go func() {
+        for {
+            msg := generateMsg()
+            // 往channel里面丢消息
+            msgChan <- msg
+        }
+    }
+
+    for {
+        // 从channel里面拿消息
+        msg := <- msgChan
+        processMsg(msg)
+    }
+
+* select
+
+select 看起来像switch，用来做channel的同步控制
+
+    select {
+    case <- chan1:
+    case a := chan2:
+        processA(a)
+    default:
+        fmt.Println("chan1 和 chan2都没有准备好")
+    }
+
+* 栗子
+
+.image https://docs.google.com/drawings/d/1sUquoJnLPpRuMPc83YZeeeR8OIl3mbL43Z5VsyyKhUU/pub?w=960&h=720
+
+* 消息
+
+.code pc.go /msg_struct_start/,/msg_struct_end/
+
+* 生产者
+
+.code pc.go /producer_struct_start/,/producer_struct_end/
+
+* 消费者
+
+.code pc.go /consumer_struct_start/,/consumer_struct_end/
+
+* 执行
+
+.play pc.go /func main()/,/^}/
+
+* 问题
+
+main函数里面的sleep看起来不优雅
+
+* 新的main函数
+
+.play pc1.go /func main()/,/^}/
+
+* 还是有一点点不优雅（作为作业
+
+* 作业
+
+- 用 https://godoc.org/sync/atomic 修改第五页slide的实现
+- 修改pc1.go，用WaitGroup来等待执行者退出
+- 写一个taskpool的package
+    目标：同时最多只能运行n个函数
+
+    type RunningPool struct {
+         ...
+    }
+    
+    func NewRunningPool(n int) *RunningPool {
+    }
+    
+    func (rp *RunningPool) Run(func() {}) {
+    }
+- 用taskpool重写生产者消费者的main函数
+
