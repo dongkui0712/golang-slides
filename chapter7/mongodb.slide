@@ -1,0 +1,80 @@
+MongoDB实践
+
+* MongoDB简介
+
+MongoDB is a cross-platform document-oriented database
+
+* 特性
+- 性能比较好
+- 无模式
+  {"_id":ObjectId("7989ddc96e4e029a26951467"), "name" : "foo", "width" : 100}}
+  {"_id":ObjectId("5689ddc96e4e929a26951398"), "name" : "bar", "height" : 100}}
+- 支持二级索引
+- 灵活的单表查询
+- 原生的支持高可用
+
+* 缺点
+- 不支持事务
+- 不支持join操作
+- 磁盘空间利用率不高
+
+* 高可用和数据一致性
+- 复制集
+.image http://www.runoob.com/wp-content/uploads/2013/12/replication.png
+
+* 
+- 数据可靠性 write concern
+- 数据一致性 strong/eventual
+
+* 
+- 分片
+.image http://woyao.qiniudn.com/mongo-sharding2.png
+
+
+* 应用实践
+- 索引
+  存储用户流量数据的表
+  {"uid":136789343,"time":ISODate("2015-11-09T16:05:00Z"),"domain":"cloud.qiniudn.com","traffic":874335}
+
+  uid,time,domain 和 time,uid,domain 索引 哪个更优？
+
+
+- 范式和反范式
+  学生选课表
+
+  反范式
+  {"student": "zhangsan", "course": "english", "teacher": "xx"}
+  {"student": "lisi", "course": "english", "teacher": "xx"}
+
+  范式
+  {"student": "zhangsan", "course_id": 12}
+  {"student": "lisi", "course_id": 12}
+
+  {"curse_id": 12, "course": "english", "teacher": "xx"}
+
+
+* 短网址
+- 映射函数
+
+- mongo数据格式
+
+  short字段做唯一索引
+  {"_id":ObjectId("5689ddc96e4e029a26951467"), "short" : "o0ve4c", "url" : "http://www.qiniu.com"}}
+
+
+  这样更好
+  {"_id" : "o0ve4c", "url" : "http://www.qiniu.com"}}
+
+* 实现
+.code server.go /^type Instance/,/^}/
+
+* short实现
+.code server.go /^func.* Short\(/,/^}/
+
+* redirect实现
+.code server.go /^func.* Redirect\(/,/^}/
+
+
+* 问题
+- 解决url重复问题
+- 如何扩展到多个实例
