@@ -1,0 +1,196 @@
+七牛 WEB 安全最佳实践
+(for developers)
+
+14 Jan 2016
+
+Spring MC
+
+caochunting@qiniu.com
+
+
+* 概要
+
+1. 什么是 WEB 安全
+
+2. 为什么 WEB 安全很重要
+
+3. WEB 安全包括那些内容
+
+4. 常见 WEB 安全问题
+
+5. WEB 安全最佳实践
+
+6. 回顾一下
+
+
+* 什么是 WEB 安全
+
+    围绕 WEB 服务衍生的安全攻防
+
+- WEB 服务器
+
+- WEB 程式
+
+- WEB 客户端
+
+
+* 为什么 WEB 安全很重要
+
+    每年 75% 的攻击发生在 WEB 服务
+
+- 软件交付由桌面软件转变为 WEB 服务化
+
+- WEB 服务数据越来越有价值
+
+- 围绕 WEB 安全的产业化
+
+
+* WEB 安全包括那些内容
+
+- 数据隐密性
+
+    * 个人隐私被暴露
+    * 帐号被盗
+
+- 数据合法性
+
+    * 推广链接 ID 被替换
+    * 页面内容被篡改
+
+- 服务可用性
+
+    * 用户打不开网站
+
+
+* 常见 WEB 安全
+
+- 注入攻击
+
+    * Code Injection
+    * SQL Injection
+
+- 跨站攻击
+
+    * XSS
+    * CRSF
+    * Redirect
+
+- 服务器攻击
+
+    * DoS
+    * DDoS
+
+
+* 常见 WEB 安全 - Code Injection (I)
+
+.play chapter9/code_injection_i.go
+
+
+* 常见 WEB 安全 - Code Injection (II)
+
+.play chapter9/code_injection_ii.go
+
+
+* 常见 WEB 安全 - SQL Injection
+
+.play chapter9/sql_injection.go
+
+
+* 常见 WEB 安全 - XSS = Cross-Site Scripting
+
+客户端脚本代码注入
+
+.html chapter9/xss.html
+
+
+* 常见 WEB 安全 - CSRF = Cross-Site Request Forgery
+
+.image chapter9/crsf.png _ 960
+
+
+* 常见 WEB 安全 - Redirect (I)
+
+.image chapter9/redirect_i.png _ 960
+
+
+* 常见 WEB 安全 - Redirect (II)
+
+.image chapter9/redirect_ii.png _ 960
+
+
+* 常见 WEB 安全 - DoS = Denial of Service
+
+- 死亡之 PING (Ping of Death)
+
+- 泪滴 (Tear Drop)
+
+- UDP 洪水 (UDP Flood)
+
+- SYN 洪水 (SYN Flood)
+
+- Land Attack (Ping Pong)
+
+- IP 欺骗 (IP Spoofing)
+
+*** 延伸阅读
+
+.link http://baike.baidu.com/view/209571.htm DoS 攻击
+
+.link http://baike.baidu.com/view/210076.htm DDoS 攻击
+
+
+* 常见 WEB 安全 - DDoS = Distributed DoS
+
+- 洪泛攻击
+
+    利用僵尸程序发送大流量至受损的受害者系统，目的在于堵塞其带宽
+
+- 放大攻击
+
+    通过恶意放大流量限制受害者系统的带宽
+
+
+* WEB 安全最佳实践
+
+- HTTPS
+
+    * 尽可能使用 HTTPS
+
+- 输入/输出 (I/O)
+
+    * 不相信任何输入/输出
+
+- 验证 (Validation)
+
+    * 使用白名单而非黑名单
+    * 不基于假设编程
+
+- 超时 (Timeout)
+
+    * 有 I/O 的地方必须有超时约束
+
+- 签名 (Crypto)
+
+    * 敏感数据一定要签名
+
+
+* WEB 安全最佳实践 (continue ...)
+
+- 监控 (monitor)
+
+    * 应用日志
+    * 用户行为
+
+- 更新 (Update)
+
+    * 及时更新 WEB 服务依赖的软件
+
+*** 延伸阅读
+
+.link http://guides.rubyonrails.org/security.html Ruby on Rails Security Guide
+
+
+* 回顾一下
+
+- WEB 安全首先是人 (开发者) 的思想
+- WEB 安全其次是环境缺陷
