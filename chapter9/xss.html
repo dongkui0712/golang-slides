@@ -1,0 +1,21 @@
+<div>
+<hr />
+<h3>>>> <span id="output">...</span></h3>
+<input type="text" value="请输入 ... &lt;input type=button value=取消 onClick=alert('XSS'); /&gt;" size="90" name="username" id="input">
+<input type="button" value="Evil Submit" id="btn-evil" />
+<input type="button" value="Safe Submit" id="btn-safe" />
+</div>
+<script type="text/javascript">
+var output = document.getElementById("output"),
+    input = document.getElementById("input"),
+    btnEvil = document.getElementById("btn-evil"),
+    btnSafe = document.getElementById("btn-safe");
+
+    btnEvil.onclick = function(evt) {
+        output.innerHTML = input.value
+    };
+
+    btnSafe.onclick = function(evt) {
+        output.innerText = input.value
+    }
+</script>
